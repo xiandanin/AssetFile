@@ -3,7 +3,6 @@ package com.dyhdyh.manager.assets;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,42 +20,28 @@ public class AssetsManager {
         mAssetManager = context.getAssets();
     }
 
-    public boolean copyAssetDir(String assetDirName, String outputDirPath) {
-        return copyAssetDir(null, assetDirName, outputDirPath);
-    }
-
-    public boolean copyAssetDir(String parentName, String assetDirName, String outputDirPath) {
-        File outputDir = new File(outputDirPath);
-
-        return copyAssetDir(parentName, assetDirName, outputDir);
-    }
-
-    public boolean copyAssetDir(String assetDirName, File outputDir) {
-        return copyAssetDir(null, assetDirName, outputDir);
-    }
-
     /**
-     * 复制文件夹
+     * 复制Asset文件夹
      *
-     * @param assetDirName
+     * @param assetSource
      * @param outputDir
      */
-    public boolean copyAssetDir(String parentName, String assetDirName, File outputDir) {
+    public boolean copyAsset(AssetFile assetSource, File outputDir) {
         try {
-            String assetName = getAssetName(parentName, assetDirName);
-            Log.d("------------>", assetName);
-            final String[] list = mAssetManager.list(assetName);
+            File outputFile = new File(outputDir, assetSource.getName());
+
+            String assetPath = assetSource.getAssetPath();
+            final String[] list = mAssetManager.list(assetPath);
             if (list.length <= 0) {
                 //文件
-                copyAssetFile(parentName, assetDirName, new File(outputDir, assetDirName));
+                copyAssetFile(assetPath, outputFile);
             } else {
                 //目录
+                if (!outputFile.exists()) {
+                    outputFile.mkdirs();
+                }
                 for (String child : list) {
-                    final File dir = new File(outputDir, assetDirName);
-                    if (!dir.exists()) {
-                        dir.mkdirs();
-                    }
-                    copyAssetDir(assetName, child, dir);
+                    copyAsset(new AssetFile(assetPath, child), outputDir);
                 }
             }
         } catch (IOException e) {
@@ -65,14 +50,17 @@ public class AssetsManager {
         return false;
     }
 
-    public boolean copyAssetFile(String assetFileName, File outputFile) {
-        return copyAssetFile(null, assetFileName, outputFile);
-    }
 
-    public boolean copyAssetFile(String parentName, String assetFileName, File outputFile) {
+    /**
+     * 复制Asset文件
+     *
+     * @param assetPath
+     * @param outputFile
+     * @return
+     */
+    public boolean copyAssetFile(String assetPath, File outputFile) {
         try {
-            String assetName = TextUtils.isEmpty(parentName) ? assetFileName : parentName + File.separator + assetFileName;
-            InputStream is = mAssetManager.open(assetName);
+            InputStream is = mAssetManager.open(assetPath);
             int byteRead = 0;
             FileOutputStream fs = new FileOutputStream(outputFile);
             byte[] buffer = new byte[1024];
