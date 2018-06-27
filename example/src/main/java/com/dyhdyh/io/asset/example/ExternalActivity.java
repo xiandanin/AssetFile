@@ -71,6 +71,8 @@ public class ExternalActivity extends AppCompatActivity {
                 .copyAsset(new AssetFile(assetPath), externalFile);
         String message = asset ? "复制成功-->" + externalFile.getAbsolutePath() : "复制失败";
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+        loadExternalFile();
     }
 
     @Override
