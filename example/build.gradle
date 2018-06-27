@@ -20,7 +20,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$rootProject.ext.android.supportVersion"
-
+    implementation "com.android.support:recyclerview-v7:$rootProject.ext.android.supportVersion"
+    implementation project(':asset-file')
 }
