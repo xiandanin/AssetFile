@@ -1,0 +1,45 @@
+ext {
+    android =
+            [
+                    applicationId    : "com.dyhdyh.io.asset",
+
+                    //版本号
+                    versionCode      : 1,
+                    versionName      : "1.0.0",
+
+                    //sdk版本
+                    compileSdkVersion: 27,
+                    buildToolsVersion: "27.0.3",
+                    minSdkVersion    : 14,
+                    targetSdkVersion : 27,
+                    supportVersion   : "27.1.1",
+            ]
+
+    jcenter =
+            [
+                    //项目名称
+                    name       : "asset-file",
+                    groupId    : "com.dyhdyh.io",
+                    //项目地址
+                    siteUrl    : "https://github.com/dengyuhan/AssetFile",
+                    //项目git地址
+                    gitUrl     : "https://github.com/dengyuhan/AssetFile.git",
+                    //项目描述
+                    description: "更方便的操作assets资源",
+                    //开发者的一些基本信息
+                    authorId   : "dengyuhan",
+                    authorName : "dengyuhan",
+                    authorEmail: "22309946@qq.com",
+
+                    //开源协议
+                    licenses   : {
+                        license {
+                            name 'MIT'
+                            url 'https://opensource.org/licenses/MIT'
+                        }
+                    },
+                    licenseName: 'MIT'
+            ]
+
+
+}

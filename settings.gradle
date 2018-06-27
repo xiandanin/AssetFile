@@ -1,1 +1,1 @@
-include ':app', ':assets-manager'
+include ':example', ':asset-file'
