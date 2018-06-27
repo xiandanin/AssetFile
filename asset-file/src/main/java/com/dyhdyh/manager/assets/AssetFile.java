@@ -6,6 +6,8 @@ import android.text.TextUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author dengyuhan
@@ -17,19 +19,20 @@ public class AssetFile {
     private Boolean directory;
 
     public AssetFile() {
-        this(File.separator);
+        this("");
     }
 
+
     public AssetFile(AssetFile parentFile, String child) {
-        this(parentFile.getAssetPath() + File.separator + child);
+        this(parentFile.getAssetPath(), child);
     }
 
     public AssetFile(String parent, String child) {
-        this(parent + File.separator + child);
+        this(parserPath(parent, child));
     }
 
     public AssetFile(String assetPath) {
-        this.assetPath = assetPath;
+        this.assetPath = assetPath == null ? "" : assetPath;
         this.name = parserName(this.assetPath);
     }
 
@@ -53,6 +56,13 @@ public class AssetFile {
 
     protected Boolean getDirectory() {
         return directory;
+    }
+
+    public static String parserPath(String parentPath, String child) {
+        if (TextUtils.isEmpty(parentPath)) {
+            return child;
+        }
+        return parentPath + File.separator + child;
     }
 
     public static String parserName(String assetPath) {
@@ -80,18 +90,30 @@ public class AssetFile {
         }
     }
 
-    public static AssetFile[] listFiles(AssetManager assetManager, String assetPath) {
+    public static List<AssetFile> listFiles(AssetManager assetManager, String assetPath) {
+        return listFiles(assetManager, assetPath, new SystemAssetFileFilter());
+    }
+
+    public static List<AssetFile> listFiles(AssetManager assetManager, String assetPath, AssetFileFilter filter) {
         try {
-            String[] list = assetManager.list(assetPath);
-            AssetFile[] files = new AssetFile[list.length];
-            for (int i = 0; i < files.length; i++) {
-                files[i] = new AssetFile(assetPath + File.separator + list[i]);
+            String newAssetPath = TextUtils.isEmpty(assetPath) ? "" : assetPath;
+            String[] list = assetManager.list(newAssetPath);
+            List<AssetFile> fileList = new ArrayList<>();
+            for (int i = 0; i < list.length; i++) {
+                AssetFile file = new AssetFile(newAssetPath, list[i]);
+                if (filter != null) {
+                    if (filter.accept(file)) {
+                        fileList.add(file);
+                    }
+                } else {
+                    fileList.add(file);
+                }
             }
-            return files;
+            return fileList;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new AssetFile[0];
+        return new ArrayList<>();
     }
 
     public static boolean exists(AssetManager assetManager, String assetPath) {

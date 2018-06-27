@@ -41,9 +41,10 @@ public class AssetsManager {
                     outputFile.mkdirs();
                 }
                 for (String child : list) {
-                    copyAsset(new AssetFile(assetPath, child), outputDir);
+                    copyAsset(new AssetFile(assetPath, child), outputFile);
                 }
             }
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
