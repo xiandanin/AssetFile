@@ -67,8 +67,7 @@ public class ExternalActivity extends AppCompatActivity {
     }
 
     public void clickPaste(View view) {
-        boolean asset = new AssetsManager(this)
-                .copyAsset(new AssetFile(assetPath), externalFile);
+        boolean asset = AssetsManager.copyAsset(this, new AssetFile(assetPath), externalFile);
         String message = asset ? "复制成功-->" + externalFile.getAbsolutePath() : "复制失败";
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 

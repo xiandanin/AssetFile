@@ -2,7 +2,6 @@ package com.dyhdyh.manager.assets;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.text.TextUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,10 +13,9 @@ import java.io.InputStream;
  *         created 2018/6/27 17:55
  */
 public class AssetsManager {
-    private AssetManager mAssetManager;
 
-    public AssetsManager(Context context) {
-        mAssetManager = context.getAssets();
+    public static boolean copyAsset(Context context, AssetFile assetSource, File outputDir) {
+        return copyAsset(context.getAssets(), assetSource, outputDir);
     }
 
     /**
@@ -26,22 +24,22 @@ public class AssetsManager {
      * @param assetSource
      * @param outputDir
      */
-    public boolean copyAsset(AssetFile assetSource, File outputDir) {
+    public static boolean copyAsset(AssetManager assetManager, AssetFile assetSource, File outputDir) {
         try {
             File outputFile = new File(outputDir, assetSource.getName());
 
             String assetPath = assetSource.getAssetPath();
-            final String[] list = mAssetManager.list(assetPath);
+            final String[] list = assetManager.list(assetPath);
             if (list.length <= 0) {
                 //文件
-                copyAssetFile(assetPath, outputFile);
+                copyAssetFile(assetManager, assetPath, outputFile);
             } else {
                 //目录
                 if (!outputFile.exists()) {
                     outputFile.mkdirs();
                 }
                 for (String child : list) {
-                    copyAsset(new AssetFile(assetPath, child), outputFile);
+                    copyAsset(assetManager, new AssetFile(assetPath, child), outputFile);
                 }
             }
             return true;
@@ -49,6 +47,10 @@ public class AssetsManager {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static boolean copyAssetFile(Context context, String assetPath, File outputFile) {
+        return copyAssetFile(context.getAssets(), assetPath, outputFile);
     }
 
 
@@ -59,9 +61,9 @@ public class AssetsManager {
      * @param outputFile
      * @return
      */
-    public boolean copyAssetFile(String assetPath, File outputFile) {
+    public static boolean copyAssetFile(AssetManager assetManager, String assetPath, File outputFile) {
         try {
-            InputStream is = mAssetManager.open(assetPath);
+            InputStream is = assetManager.open(assetPath);
             int byteRead = 0;
             FileOutputStream fs = new FileOutputStream(outputFile);
             byte[] buffer = new byte[1024];
@@ -77,8 +79,4 @@ public class AssetsManager {
         return false;
     }
 
-
-    private String getAssetName(String parentName, String assetName) {
-        return TextUtils.isEmpty(parentName) ? assetName : parentName + File.separator + assetName;
-    }
 }

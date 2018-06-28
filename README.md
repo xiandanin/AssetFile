@@ -17,7 +17,7 @@ new AssetFile();
 
 new AssetFile(assetPath);
 
-new AssetFile(parent,child);
+new AssetFile(parent, child);
 
 //获取文件或目录名称
 assetFile.getName();
@@ -32,11 +32,9 @@ assetFile.getUri();
 
 ### AssetsManager
 ```
-AssetsManager assetsManager = new AssetsManager(context);
-
 //从asset复制文件到手机目录
-assetsManager.copyAssetFile(assetFile, saveFile);
+AssetsManager.copyAssetFile(context, assetFile, saveFile);
 
 //从asset复制文件夹或文件到手机目录
-assetsManager.copyAsset(assetFile, saveDir);
+AssetsManager.copyAsset(context, assetFile, saveDir);
 ```
