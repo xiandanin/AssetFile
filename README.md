@@ -5,7 +5,7 @@
 
 ### Gradle
 ```
-implementation 'com.dyhdyh.io:asset-file:1.0.0'
+implementation 'com.dyhdyh.io:asset-file:1.0.1'
 ```
 
 ### AssetFile
