@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         String path = getIntent().getStringExtra("path");
         setTitle(TextUtils.isEmpty(path) ? "Assets" : "Assets - " + path);
 
-        List<AssetFile> files = AssetFile.listFiles(getAssets(), path);
+        List<AssetFile> files = new AssetFile(path).listFiles(getAssets());
         AssetFileAdapter adapter = new AssetFileAdapter(files);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);

@@ -74,27 +74,23 @@ public class AssetFile {
     }
 
 
-    public static boolean isDirectory(AssetManager assetManager, AssetFile assetFile) {
-        if (assetFile.getDirectory() == null) {
-            assetFile.directory = isDirectory(assetManager, assetFile.getAssetPath());
+    public boolean isDirectory(AssetManager assetManager) {
+        if (directory == null) {
+            try {
+                directory = assetManager.list(assetPath).length > 0;
+            } catch (Exception e) {
+                e.printStackTrace();
+                directory = false;
+            }
         }
-        return assetFile.getDirectory();
+        return directory;
     }
 
-    public static boolean isDirectory(AssetManager assetManager, String assetPath) {
-        try {
-            return assetManager.list(assetPath).length > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public List<AssetFile> listFiles(AssetManager assetManager) {
+        return listFiles(assetManager, new SystemAssetFileFilter());
     }
 
-    public static List<AssetFile> listFiles(AssetManager assetManager, String assetPath) {
-        return listFiles(assetManager, assetPath, new SystemAssetFileFilter());
-    }
-
-    public static List<AssetFile> listFiles(AssetManager assetManager, String assetPath, AssetFileFilter filter) {
+    public List<AssetFile> listFiles(AssetManager assetManager, AssetFileFilter filter) {
         try {
             String newAssetPath = TextUtils.isEmpty(assetPath) ? "" : assetPath;
             String[] list = assetManager.list(newAssetPath);
@@ -116,7 +112,7 @@ public class AssetFile {
         return new ArrayList<>();
     }
 
-    public static boolean exists(AssetManager assetManager, String assetPath) {
+    public boolean exists(AssetManager assetManager) {
         try {
             assetManager.list(assetPath);
             return true;

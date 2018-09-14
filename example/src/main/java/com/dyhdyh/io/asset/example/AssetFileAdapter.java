@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dyhdyh.manager.assets.AssetFile;
 
@@ -33,7 +34,7 @@ public class AssetFileAdapter extends RecyclerView.Adapter<AssetFileAdapter.Item
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         final AssetFile item = mFiles.get(position);
-        final boolean isDirectory = AssetFile.isDirectory(holder.itemView.getContext().getAssets(), item);
+        final boolean isDirectory = item.isDirectory(holder.itemView.getContext().getAssets());
         holder.iv_icon.setImageResource(isDirectory ? R.drawable.ic_directory : R.drawable.ic_file);
         holder.tv_name.setText(item.getName());
         holder.tv_path.setText(item.getAssetPath());
@@ -51,6 +52,7 @@ public class AssetFileAdapter extends RecyclerView.Adapter<AssetFileAdapter.Item
             @Override
             public boolean onLongClick(View v) {
                 ExternalActivity.start(v.getContext(), item.getAssetPath(),"");
+                Toast.makeText(v.getContext(), "请选择要复制的文件夹", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
