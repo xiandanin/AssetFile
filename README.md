@@ -5,7 +5,7 @@
 
 ### Gradle
 ```
-implementation 'com.dyhdyh.io:asset-file:1.0.1'
+implementation 'com.dyhdyh.io:asset-file:1.0.2'
 ```
 
 ### AssetFile
@@ -19,7 +19,10 @@ new AssetFile(assetPath);
 
 new AssetFile(parent, child);
 
-//获取文件或目录名称
+//获取完整路径
+assetFile.getAssetPath();
+
+//获取文件名称或目录名称
 assetFile.getName();
 
 //获取父级目录
@@ -27,6 +30,18 @@ assetFile.getParentFile();
 
 //转换Uri
 assetFile.getUri();
+
+//是否文件夹
+assetFile.isDirectory(getAssets());
+
+//是否根目录
+assetFile.isRootDir();
+
+//文件是否存在
+assetFile.exists(getAssets());
+
+//获取目录下的文件数组
+assetFile.listFiles(getAssets());
 ```
 
 
